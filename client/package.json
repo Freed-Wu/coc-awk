@@ -1,24 +1,25 @@
 {
-  "name": "awk-ide-vscode",
+  "name": "coc-awk",
   "displayName": "AWK IDE",
-  "description": "VSCode client for AWK Language Server",
+  "description": "coc.nvim client for AWK Language Server",
   "author": "Stanislav Chernov <ch-e-st@yandex.ru>",
   "license": "MIT",
-  "version": "0.10.5",
+  "version": "0.0.1",
   "publisher": "beaglefoot",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Beaglefoot/awk-language-server"
+    "url": "https://github.com/Freed-Wu/coc-awk"
   },
   "icon": "icon/awk_ide_logo.png",
   "engines": {
-    "vscode": "^1.52.0"
+    "coc": "^0.0.82"
   },
   "categories": [
     "Programming Languages",
     "Formatters"
   ],
   "keywords": [
+    "coc.nvim",
     "awk",
     "gawk",
     "ide",
@@ -27,7 +28,7 @@
   "activationEvents": [
     "onLanguage:awk"
   ],
-  "main": "./out/extension",
+  "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "type": "object",
@@ -77,14 +78,14 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "cd .. && yarn build:client:force"
+    "vscode:prepublish": "cd .. && yarn build:client:force",
+    "prepack": "tsc -b tsconfig.json"
   },
   "dependencies": {
-    "awk-language-server": "0.10.5",
-    "vscode-languageclient": "^7.0.0"
+    "awk-language-server": "0.10.5"
   },
   "devDependencies": {
-    "@types/vscode": "^1.52.0",
-    "vscode-test": "^1.3.0"
+    "@types/node": "^22.5.2",
+    "coc.nvim": "^0.0.83-next.18"
   }
 }

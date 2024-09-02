@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "out",
     "rootDir": "src",
-    "composite": true
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false
   },
   "include": ["src"],
   "exclude": ["node_modules"]
