@@ -1,12 +1,12 @@
 import * as path from 'path'
-import { ExtensionContext, languages, SemanticTokensLegend } from 'vscode'
+import { ExtensionContext, languages, SemanticTokensLegend, Thenable } from 'coc.nvim'
 
 import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   TransportKind,
-} from 'vscode-languageclient/node'
+} from 'coc.nvim'
 import { SemanticTokensProvider, tokenTypesLegend } from './semanticTokens'
 
 let client: LanguageClient
@@ -46,9 +46,9 @@ export function activate(context: ExtensionContext) {
   client.onReady().then(() => {
     context.subscriptions.push(
       languages.registerDocumentSemanticTokensProvider(
-        { language: 'awk' },
+        [{ language: 'awk' }],
         new SemanticTokensProvider(client),
-        new SemanticTokensLegend(tokenTypesLegend, []),
+        {tokenTypes: tokenTypesLegend, tokenModifiers: []},
       ),
     )
   })

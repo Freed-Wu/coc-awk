@@ -4,8 +4,8 @@ import {
   SemanticTokens,
   SemanticTokensBuilder,
   TextDocument,
-} from 'vscode'
-import { LanguageClient } from 'vscode-languageclient/node'
+} from 'coc.nvim'
+import { LanguageClient } from 'coc.nvim'
 
 const tokenTypes = new Map<string, number>()
 
