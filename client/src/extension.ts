@@ -1,21 +1,33 @@
 import * as path from 'path'
-//# #if HAVE_VSCODE
-import { ExtensionContext, languages, SemanticTokensLegend } from 'vscode'
-//# #elif HAVE_COC_NVIM
-//# import { ExtensionContext, languages, SemanticTokensLegend } from 'coc.nvim'
-//# #define Thenable Promise
-//# #endif
+import type { ExtensionContext as ExtensionContext_vscode } from 'vscode';
+import type {
+    LanguageClient as LanguageClient_vscode,
+    LanguageClientOptions as LanguageClientOptions_vscode,
+    ServerOptions as ServerOptions_vscode,
+} from 'vscode-languageclient/node';
+import type {
+    ExtensionContext as ExtensionContext_coc,
+    LanguageClient as LanguageClient_coc,
+    LanguageClientOptions as LanguageClientOptions_coc,
+    ServerOptions as ServerOptions_coc,
+} from 'coc.nvim';
+type LanguageClient = LanguageClient_vscode | LanguageClient_coc;
+type LanguageClientOptions = LanguageClientOptions_vscode | LanguageClientOptions_coc;
+type ServerOptions = ServerOptions_vscode | ServerOptions_coc;
+type ExtensionContext = ExtensionContext_vscode | ExtensionContext_coc;
+let vscode, vlc;
+try {
+    vscode = require('vscode');
+    vlc = require('vscode-languageclient/node');
+} catch (error) {
+    vscode = require('coc.nvim');
+    vlc = vscode;
+}
+const languages = vscode.languages;
+const SemanticTokensLegend = vscode.SemanticTokensLegend;
+const TransportKind = vlc.TransportKind;
+const LanguageClient = vlc.LanguageClient;
 
-import {
-  LanguageClient,
-  LanguageClientOptions,
-  ServerOptions,
-  TransportKind,
-//# #if HAVE_VSCODE
-} from 'vscode-languageclient/node'
-//# #elif HAVE_COC_NVIM
-//# } from 'coc.nvim'
-//# #endif
 import { SemanticTokensProvider, tokenTypesLegend } from './semanticTokens'
 
 let client: LanguageClient
@@ -53,15 +65,18 @@ export function activate(context: ExtensionContext) {
   client = new LanguageClient('awk-ide-vscode', 'AWK IDE', serverOptions, clientOptions)
 
   client.onReady().then(() => {
+    let legend;
+    try {
+      legend = new SemanticTokensLegend(tokenTypesLegend, []);
+    } catch (error) {
+      legend = {tokenTypes: tokenTypesLegend, tokenModifiers: []};
+    }
     context.subscriptions.push(
       languages.registerDocumentSemanticTokensProvider(
         [{ language: 'awk' }],
+        // @ts-expect-error
         new SemanticTokensProvider(client),
-        //# #if HAVE_VSCODE
-        new SemanticTokensLegend(tokenTypesLegend, []),
-        //# #elif HAVE_COC_NVIM
-        //# {tokenTypes: tokenTypesLegend, tokenModifiers: []},
-        //# #endif
+        legend,
       ),
     )
   })

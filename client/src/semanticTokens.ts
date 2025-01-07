@@ -1,16 +1,32 @@
+import type {
+  CancellationToken as CancellationToken_vscode,
+  DocumentSemanticTokensProvider as DocumentSemanticTokensProvider_vscode,
+  TextDocument as TextDocument_vscode,
+} from 'vscode';
+import type {
+  LanguageClient as LanguageClient_vscode
+} from 'vscode-languageclient/node'
+import type {
+  CancellationToken as CancellationToken_coc,
+  DocumentSemanticTokensProvider as DocumentSemanticTokensProvider_coc,
+  TextDocument as TextDocument_coc,
+  LanguageClient as LanguageClient_coc
+} from 'coc.nvim'
+type CancellationToken = CancellationToken_vscode | CancellationToken_coc;
+type DocumentSemanticTokensProvider = DocumentSemanticTokensProvider_vscode | DocumentSemanticTokensProvider_coc;
+type TextDocument = TextDocument_vscode | TextDocument_coc;
+type LanguageClient = LanguageClient_vscode | LanguageClient_coc;
 import {
-  CancellationToken,
-  DocumentSemanticTokensProvider,
   SemanticTokens,
   SemanticTokensBuilder,
-  TextDocument,
-  //# #if HAVE_VSCODE
 } from 'vscode'
-import { LanguageClient } from 'vscode-languageclient/node'
-//# #elif HAVE_COC_NVIM
-//# } from 'coc.nvim'
-//# import { LanguageClient } from 'coc.nvim'
-//# #endif
+let vscode;
+try {
+    vscode = require('vscode');
+} catch (error) {
+    vscode = require('coc.nvim');
+}
+
 
 const tokenTypes = new Map<string, number>()
 

@@ -1,6 +1,6 @@
 # AWK IDE
 
-VSCode client extension for AWK Language Server.
+VSCode/(Neo)Vim client extension for AWK Language Server.
 
 ## Features
 
